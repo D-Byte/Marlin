@@ -2,8 +2,8 @@
 #define ULTRA_LCD_IMPLEMENTATION_HITACHI_HD44780_H
 
 /**
-* Implementation of the LCD display routines for a hitachi HD44780 display. These are common LCD character displays.
-* When selecting the rusian language, a slightly different LCD implementation is used to handle UTF8 characters.
+* Implementation of the LCD display routines for a Hitachi HD44780 display. These are common LCD character displays.
+* When selecting the Russian language, a slightly different LCD implementation is used to handle UTF8 characters.
 **/
 
 #ifndef REPRAPWORLD_KEYPAD
@@ -20,7 +20,7 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
 // via a shift/i2c register.
 
 #ifdef ULTIPANEL
-// All Ultipanels might have an encoder - so this is always be mapped onto first two bits
+// All UltiPanels might have an encoder - so this is always be mapped onto first two bits
 #define BLEN_B 1
 #define BLEN_A 0
 
@@ -708,19 +708,39 @@ static void lcd_implementation_drawmenu_sddirectory(uint8_t row, const char* pst
 #define lcd_implementation_drawmenu_function_selected(row, pstr, data) lcd_implementation_drawmenu_generic(row, pstr, '>', ' ')
 #define lcd_implementation_drawmenu_function(row, pstr, data) lcd_implementation_drawmenu_generic(row, pstr, ' ', ' ')
 
+static void lcd_implementation_draw_line(uint8_t row, const char* line)
+{
+    lcd.setCursor(0, row);
+    lcd_printPGM(line);
+}
+
 static void lcd_implementation_quick_feedback()
 {
 #ifdef LCD_USE_I2C_BUZZER
-    lcd.buzz(60,1000/6);
+	#if !defined(LCD_FEEDBACK_FREQUENCY_HZ) || !defined(LCD_FEEDBACK_FREQUENCY_DURATION_MS)
+	  lcd_buzz(1000/6,100);
+	#else
+	  lcd_buzz(LCD_FEEDBACK_FREQUENCY_DURATION_MS,LCD_FEEDBACK_FREQUENCY_HZ);
+	#endif
 #elif defined(BEEPER) && BEEPER > -1
     SET_OUTPUT(BEEPER);
+	#if !defined(LCD_FEEDBACK_FREQUENCY_HZ) || !defined(LCD_FEEDBACK_FREQUENCY_DURATION_MS)
     for(int8_t i=0;i<10;i++)
     {
       WRITE(BEEPER,HIGH);
-      delayMicroseconds(100);
+      delay(3);
       WRITE(BEEPER,LOW);
-      delayMicroseconds(100);
+      delay(3);
     }
+    #else
+    for(int8_t i=0;i<(LCD_FEEDBACK_FREQUENCY_DURATION_MS / (1000 / LCD_FEEDBACK_FREQUENCY_HZ));i++)
+    {
+      WRITE(BEEPER,HIGH);
+      delayMicroseconds(1000000 / LCD_FEEDBACK_FREQUENCY_HZ / 2);
+      WRITE(BEEPER,LOW);
+      delayMicroseconds(1000000 / LCD_FEEDBACK_FREQUENCY_HZ / 2);
+    }
+    #endif
 #endif
 }
 
