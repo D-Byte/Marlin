@@ -37,14 +37,14 @@
 # from the commandline with "make HARDWARE_MOTHERBOARD=71" for example
 
 # This defined the board you are compiling for (see Configuration.h for the options)
-HARDWARE_MOTHERBOARD ?= 7
+HARDWARE_MOTHERBOARD ?= 11
 
 # Arduino source install directory, and version number
-ARDUINO_INSTALL_DIR  ?= D:/Dropbox/Ultimaker/build-software
-ARDUINO_VERSION      ?= 23
+ARDUINO_INSTALL_DIR  ?= /Applications/Arduino.app/Contents/Resources/Java
+ARDUINO_VERSION      ?= 105
 
 # You can optionally set a path to the avr-gcc tools. Requires a trailing slash. (ex: /usr/local/avr-gcc/bin)
-AVR_TOOLS_PATH ?= D:/Dropbox/Ultimaker/build-software/hardware/tools/avr/bin/
+AVR_TOOLS_PATH ?=
 
 #Programmer configuration
 UPLOAD_RATE        ?= 115200
@@ -154,6 +154,11 @@ MCU              ?= at90usb1286
 
 #Gen3+
 else ifeq  ($(HARDWARE_MOTHERBOARD),9)
+HARDWARE_VARIANT ?= Sanguino
+MCU              ?= atmega644p
+
+#Gen3 Monolithic Electronics
+else ifeq  ($(HARDWARE_MOTHERBOARD),22)
 HARDWARE_VARIANT ?= Sanguino
 MCU              ?= atmega644p
 
