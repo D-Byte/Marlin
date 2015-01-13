@@ -27,7 +27,7 @@
 #define STRING_VERSION "Marlin v1.0.2"
 #define STRING_URL "DByte.nl"
 #define STRING_VERSION_CONFIG_H __DATE__ " " __TIME__ // build date and time
-#define STRING_CONFIG_H_AUTHOR "(none, default config)" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "(Arne Durr, Ultimaker)" // Who made the changes.
 #define STRING_SPLASH STRING_VERSION " - " STRING_URL // will be shown during bootup
 
 // SERIAL_PORT selects which serial port should be used for communication with the host.
